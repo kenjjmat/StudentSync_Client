@@ -43,7 +43,7 @@ int main() {
 
     while (true) {
         // listen for datagrams
-        log("Listen for datagram ...");
+        log("Listening for datagram ...");
 
         // create multicast receiver object
         liblec::lecnet::udp::multicast::receiver rc(30003, "239.255.0.3", "0.0.0.0");
@@ -106,13 +106,44 @@ int main() {
 
         std::cout << liblec::lecui::date::time_stamp();
 
-        s = " Selected IP: " + selected_ip;
+        s = " Selected IP: " + selected_ip + "\n";
 
         printf("\x1B[95m%s\033[0m", s.c_str());
 
-        // loop forever
-        while (1)
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        // configure tcp/ip client parameters
+        liblec::lecnet::tcp::client::client_params params;
+        params.address = selected_ip;
+        params.port = 55553;
+        params.magic_number = 16;
+        params.use_ssl = false;
+
+        // create tcp/ip client object
+        liblec::lecnet::tcp::client c;
+
+        if (c.connect(params, error)) {
+            while (c.connecting())
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+            if (c.connected(error)) {
+                while (c.running()) {
+                    // send data to server
+                    std::string received;
+                    if (c.send_data("This is being sent", received, 5, nullptr, error))
+                        log("Response: " + received);
+                    else
+                        log(error);
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+                }
+
+                std::cout << liblec::lecui::date::time_stamp() + " ";
+                printf("\x1B[31m%s\033[0m", "Connection lost!\n");
+            }
+            else
+                log(error);
+        }
+        else
+            log(error);
     }
 
     return 0;
