@@ -16,6 +16,9 @@
     <Filter Include="Source Files\selectIP">
       <UniqueIdentifier>{ba2483ce-ff6a-41cc-8c4d-560948115e40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\get_sync_folder">
+      <UniqueIdentifier>{73357386-abed-46c3-b4d1-1cab39c8b99a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StudentSync_Client.cpp">
@@ -24,10 +27,16 @@
     <ClCompile Include="selectIP.cpp">
       <Filter>Source Files\selectIP</Filter>
     </ClCompile>
+    <ClCompile Include="get_sync_folder.cpp">
+      <Filter>Source Files\get_sync_folder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="selectIP.h">
       <Filter>Source Files\selectIP</Filter>
+    </ClInclude>
+    <ClInclude Include="get_sync_folder.h">
+      <Filter>Source Files\get_sync_folder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
