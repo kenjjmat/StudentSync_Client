@@ -25,7 +25,7 @@
 #include <filesystem>
 
 // liblec network library
-#include <liblec/lecnet/udp.h>  // for UDP Multicasting
+#include <liblec/lecnet/udp.h>  // for UDP broadcasting
 #include <liblec/lecnet/tcp.h>
 #include <liblec/lecui.h>
 
@@ -56,8 +56,8 @@ int main() {
         // listen for datagrams
         log("Listening for datagram ...");
 
-        // create multicast receiver object
-        liblec::lecnet::udp::multicast::receiver rc(30003, "239.255.0.3", "0.0.0.0");
+        // create broadcast receiver object
+        liblec::lecnet::udp::broadcast::receiver receiver(30003, "0.0.0.0");
 
         std::string error, ips_serialized;
 
@@ -65,13 +65,13 @@ int main() {
             const long long cycle = 1500;   // 1.5 seconds
 
             // run the receiver
-            if (rc.run(cycle, error)) {
+            if (receiver.run(cycle, error)) {
                 // loop while running
-                while (rc.running())
+                while (receiver.running())
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
                 // no longer running ... check if a datagram was received
-                if (rc.get(ips_serialized, error)) {
+                if (receiver.get(ips_serialized, error)) {
                     std::cout << liblec::lecui::date::time_stamp() + " ";
                     printf("\x1B[33m%s\033[0m", "Datagram received!\n");
                     break;
@@ -82,7 +82,7 @@ int main() {
         }
 
         // stop the receiver
-        rc.stop();
+        receiver.stop();
 
         // deserialize ip list
         std::vector<std::string> ips;
@@ -129,14 +129,14 @@ int main() {
         params.use_ssl = false;
 
         // create tcp/ip client object
-        liblec::lecnet::tcp::client c;
+        liblec::lecnet::tcp::client client;
 
-        if (c.connect(params, error)) {
-            while (c.connecting())
+        if (client.connect(params, error)) {
+            while (client.connecting())
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-            if (c.connected(error)) {
-                while (c.running()) {
+            if (client.connected(error)) {
+                while (client.running()) {
                     // compile list of files in sync folder
                     std::vector<std::string> file_list;
                     for (const auto& entry : std::filesystem::directory_iterator(sync_folder))
@@ -145,7 +145,7 @@ int main() {
 
                     // send data to server
                     std::string received;
-                    if (c.send_data("This is being sent", received, 5, nullptr, error))
+                    if (client.send_data("This is being sent", received, 5, nullptr, error))
                         log("Response: " + received);
                     else
                         log(error);
