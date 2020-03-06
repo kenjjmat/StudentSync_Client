@@ -3,7 +3,7 @@ StudentSync LAN Synchronization Tool: Client
 
 The StudentSync application is made up of
 1. A server (https://github.com/alecmus/StudentSync_Server)
-2. A client (https://github.com/alecmus/StudentSync_Client)
+2. A client (https://github.com/kenjjmat/StudentSync_Client)
 
 The application is a tool for automatically synchronizing Student generated academic
 material over a LAN.
