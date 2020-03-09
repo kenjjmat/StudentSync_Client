@@ -35,10 +35,8 @@
 // sync folder location
 #include "get_sync_folder.h"
 
-void log(std::string info) {
-    info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
-    std::cout << info;
-}
+// process data received
+#include "process_data_received.h"
 
 int main() {
     std::cout << "\n**********************************************\n";
@@ -137,19 +135,7 @@ int main() {
 
             if (client.connected(error)) {
                 while (client.running()) {
-                    // compile list of files in sync folder
-                    std::vector<std::string> file_list;
-                    for (const auto& entry : std::filesystem::directory_iterator(sync_folder))
-                        if (entry.is_regular_file())
-                            file_list.push_back(entry.path().filename().string());
-
-                    // send data to server
-                    std::string received;
-                    if (client.send_data("This is being sent", received, 5, nullptr, error))
-                        log("Response: " + received);
-                    else
-                        log(error);
-
+                    process_data_received(client, sync_folder);
                     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
                 }
 
