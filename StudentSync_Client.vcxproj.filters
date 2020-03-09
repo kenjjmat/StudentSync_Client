@@ -22,6 +22,9 @@
     <Filter Include="Source Files\process_data_received">
       <UniqueIdentifier>{5b9c23a5-b9ce-4592-ad00-59e9ae0aa3fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\read_file">
+      <UniqueIdentifier>{dd7fe894-5cf8-482d-9357-a96cf979cf2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StudentSync_Client.cpp">
@@ -36,6 +39,9 @@
     <ClCompile Include="process_data_received.cpp">
       <Filter>Source Files\process_data_received</Filter>
     </ClCompile>
+    <ClCompile Include="read_file.cpp">
+      <Filter>Source Files\read_file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="selectIP.h">
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="process_data_received.h">
       <Filter>Source Files\process_data_received</Filter>
+    </ClInclude>
+    <ClInclude Include="read_file.h">
+      <Filter>Source Files\read_file</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

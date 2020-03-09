@@ -161,12 +161,14 @@
   <ItemGroup>
     <ClCompile Include="get_sync_folder.cpp" />
     <ClCompile Include="process_data_received.cpp" />
+    <ClCompile Include="read_file.cpp" />
     <ClCompile Include="selectIP.cpp" />
     <ClCompile Include="StudentSync_Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="get_sync_folder.h" />
     <ClInclude Include="process_data_received.h" />
+    <ClInclude Include="read_file.h" />
     <ClInclude Include="selectIP.h" />
   </ItemGroup>
   <ItemGroup>

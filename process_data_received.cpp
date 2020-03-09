@@ -31,9 +31,23 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
+#include "read_file.h"
+
 void log(std::string info) {
     info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
     std::cout << info;
+}
+
+struct file {
+    std::string filename;
+    std::vector<char> filedata;
+};
+
+// template definition to make file serializable
+template <class Archive>
+void serialize(Archive& ar, file& data, const unsigned int version) {
+    ar& data.filename;
+    ar& data.filedata;
 }
 
 enum sync_mode { filenames = 1, filelist = 2 };
@@ -42,6 +56,38 @@ struct sync_data {
     int mode;
     std::string payload;
 };
+
+// serialize files
+bool serialize_files(const std::vector<file>& files,
+    std::string& serialized, std::string& error) {
+    try {
+        std::stringstream ss;
+        boost::archive::text_oarchive oa(ss);
+        oa& files;
+        serialized = ss.str();
+        return true;
+    }
+    catch (const std::exception & e) {
+        error = e.what();
+        return false;
+    }
+}
+
+// deserialize files
+bool deserialize_files(const std::string& serialized,
+    std::vector<file>& files, std::string& error) {
+    try {
+        std::stringstream ss;
+        ss << serialized;
+        boost::archive::text_iarchive ia(ss);
+        ia& files;
+        return true;
+    }
+    catch (const std::exception & e) {
+        error = e.what();
+        return false;
+    }
+}
 
 // template definition to make sync_data serializable
 template <class Archive>
@@ -127,6 +173,8 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     switch (mode)
     {
     case sync_mode::filenames: {
+        log("Sending list of files to server");
+
         // compile list of files in sync folder
         std::vector<std::string> filename_list;
         for (const auto& entry : std::filesystem::directory_iterator(sync_folder))
@@ -145,9 +193,8 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     } break;
 
     case sync_mode::filelist: {
-
-
-        // switch mode for next iteration
+        log("Requesting missing files from server");
+        // request any missing files
         mode = sync_mode::filenames;
     } break;
     default:
@@ -159,8 +206,97 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     if (serialize_sync_data(data, serialized_sync_data, error)) {
         // send data to server
         std::string received;
-        if (client.send_data(serialized_sync_data, received, 5, nullptr, error))
-            log("Response: " + received);
+        if (client.send_data(serialized_sync_data, received, 5, nullptr, error)) {
+            // deserialized reply
+            sync_data reply_data;
+            if (deserialize_sync_data(received, reply_data, error)) {
+                switch (reply_data.mode)
+                {
+                case sync_mode::filenames: {
+                    log("Server notifying what files it needs from this client");
+
+                    // deserialize filename_list
+                    std::vector<std::string> filename_list;
+                    if (deserialize_filename_list(reply_data.payload, filename_list, error)) {
+                        if (filename_list.empty()) {
+                            log("Server has all of this client's files");
+                            break;
+                        }
+
+                        // read files
+                        std::vector<file> files;
+
+                        for (const auto& filename : filename_list) {
+                            // read file
+                            file this_file;
+                            this_file.filename = filename;
+                            if (read_file(sync_folder + "\\" + filename, this_file.filedata, error))
+                                files.push_back(this_file);
+                        }
+
+                        // serialize files
+                        std::string serialized_files;
+                        if (serialize_files(files, serialized_files, error)) {
+                            // make sync_data object
+                            sync_data requested_data;
+                            requested_data.mode = sync_mode::filelist;
+                            requested_data.payload = serialized_files;
+
+                            // serialize sync_data object
+                            std::string serialized_requested_data;
+                            if (serialize_sync_data(requested_data, serialized_requested_data, error)) {
+                                // send to server
+                                received.clear();
+
+                                log("Sending files requested by server");
+
+                                if (client.send_data(serialized_requested_data, received, 5, nullptr, error)) {
+                                    log("Files sent successfully!");
+                                    log("Server reply: " + received);
+                                }
+                                else
+                                    log(error);
+                            }
+                            else
+                                log(error);
+                        }
+                        else
+                            log(error);
+                    }
+                } break;
+
+                case sync_mode::filelist: {
+                    // server has replied with missing files (if any)
+                    log("Server has replied with possible missing files");
+
+                    sync_data missing_files_data;
+                    if (deserialize_sync_data(received, missing_files_data, error)) {
+                        if (missing_files_data.mode == sync_mode::filelist) {
+                            // deserialize file list
+                            std::vector<file> missing_files;
+                            if (deserialize_files(missing_files_data.payload, missing_files, error)) {
+                                log(std::to_string(missing_files.size()) + " files received from server");
+
+                                // to-do: implement saving these files to the sync folder
+
+
+
+
+
+                            }
+                        }
+                    }
+                    else
+                        log(error);
+                } break;
+
+                default:
+                    break;
+                }
+            }
+            else
+                log(error);
+        }
         else
             log(error);
     }
