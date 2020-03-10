@@ -34,7 +34,7 @@
 #include "read_file.h"
 #include "write_file.h"
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 void log(std::string info) {
     info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
@@ -166,6 +166,7 @@ bool deserialize_filename_list(const std::string& serialized,
 
 void process_data_received(liblec::lecnet::tcp::client& client,
     const std::string& sync_folder) {
+    const unsigned long long FILE_SIZE_LIMIT = 10 * 1024 * 1024;
     static sync_mode mode = sync_mode::filenames;
 
     std::string error;
@@ -183,7 +184,7 @@ void process_data_received(liblec::lecnet::tcp::client& client,
         // compile list of files in sync folder
         std::vector<std::string> filename_list;
         for (const auto& entry : std::filesystem::directory_iterator(sync_folder))
-            if (entry.is_regular_file())
+            if (entry.is_regular_file() && (entry.file_size() < FILE_SIZE_LIMIT))
                 filename_list.push_back(entry.path().filename().string());
 
         // serialize filename_list into a string
