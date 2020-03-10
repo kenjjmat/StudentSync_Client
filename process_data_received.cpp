@@ -34,7 +34,7 @@
 #include "read_file.h"
 #include "write_file.h"
 
-#define VERBOSE 0
+#define VERBOSE 1
 
 void log(std::string info) {
     info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
@@ -43,7 +43,7 @@ void log(std::string info) {
 
 struct file {
     std::string filename;
-    std::vector<char> filedata;
+    std::string filedata;
 };
 
 // template definition to make file serializable
@@ -214,7 +214,7 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     if (serialize_sync_data(data, serialized_sync_data, error)) {
         // send data to server
         std::string received;
-        if (client.send_data(serialized_sync_data, received, 5, nullptr, error)) {
+        if (client.send_data(serialized_sync_data, received, 60, nullptr, error)) {
             // deserialized reply
             sync_data reply_data;
             if (deserialize_sync_data(received, reply_data, error)) {
@@ -265,7 +265,7 @@ void process_data_received(liblec::lecnet::tcp::client& client,
                                 log("Sending files requested by server");
 #endif
 
-                                if (client.send_data(serialized_requested_data, received, 5, nullptr, error)) {
+                                if (client.send_data(serialized_requested_data, received, 60, nullptr, error)) {
 #if VERBOSE
                                     log("Files sent successfully!");
                                     log("Server reply: " + received);

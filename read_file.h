@@ -17,9 +17,8 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
 
 bool read_file(const std::string& filepath,
-	std::vector<char>& filedata,
+	std::string& filedata,
 	std::string& error);

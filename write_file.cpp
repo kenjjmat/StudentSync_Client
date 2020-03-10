@@ -19,20 +19,21 @@
 
 #include <fstream>
 
-bool write_file(const std::vector<char>& data,
+bool write_file(const std::string& data,
 	const std::string& full_path,
 	std::string& error)
 {
 	try {
-		std::ofstream file(full_path, std::ios::binary); // output file stream
+		std::ofstream file;
+		file.open(full_path,
+			std::ios::out | std::ios::trunc | std::ios::binary);
 
-		if (file)
-		{
-			// dump the contents of the vector in the file
-			for (auto& inf : data)
-				file.write(reinterpret_cast<const char*>(&inf), sizeof(inf));
+		if (!file) {
+			error = "Error opening destination file";
+			return false;
 		}
 
+		file.write(data.c_str(), data.length());
 		file.close();
 		return true;
 	}

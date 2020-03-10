@@ -17,9 +17,8 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
 
-bool write_file(const std::vector<char>& data,
+bool write_file(const std::string& data,
 	const std::string& full_path,
 	std::string& error);

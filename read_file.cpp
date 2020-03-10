@@ -19,7 +19,7 @@
 
 #include <fstream>
 
-bool read_file(const std::string& filepath, std::vector<char>& filedata, std::string& error) {
+bool read_file(const std::string& filepath, std::string& filedata, std::string& error) {
 	// open the file:
 	std::ifstream file(filepath, std::ios::binary);
 
@@ -29,26 +29,33 @@ bool read_file(const std::string& filepath, std::vector<char>& filedata, std::st
 	}
 
 	try {
+		// open the file:
+		std::ifstream file(filepath, std::ios::binary);
+
+		if (!file) {
+			error = "Error reading file";
+			return false;
+		}
+
 		// Stop eating new lines in binary mode!!!
 		file.unsetf(std::ios::skipws);
 
 		// get its size:
-		std::streampos fileSize;
+		long fileSize;
 
 		file.seekg(0, std::ios::end);
-		fileSize = file.tellg();
+		fileSize = (long)file.tellg();
 		file.seekg(0, std::ios::beg);
 
-		// reserve capacity
-		filedata.reserve(size_t(fileSize));
-
-		// read the data:
-		filedata.insert(filedata.begin(),
-			std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>());
-
+		// read data from file
+		char* buffer = new char[fileSize];
+		file.read(buffer, fileSize);
 		file.close();
 
+		std::string s(buffer, fileSize);
+		filedata = s;
+
+		delete[]buffer;
 		return true;
 	}
 	catch (const std::exception & e) {
