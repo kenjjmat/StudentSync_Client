@@ -33,6 +33,8 @@
 
 #include "read_file.h"
 
+#define VERBOSE 0
+
 void log(std::string info) {
     info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
     std::cout << info;
@@ -173,7 +175,9 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     switch (mode)
     {
     case sync_mode::filenames: {
+#if VERBOSE
         log("Sending list of files to server");
+#endif
 
         // compile list of files in sync folder
         std::vector<std::string> filename_list;
@@ -193,7 +197,10 @@ void process_data_received(liblec::lecnet::tcp::client& client,
     } break;
 
     case sync_mode::filelist: {
+#if VERBOSE
         log("Requesting missing files from server");
+#endif
+
         // request any missing files
         mode = sync_mode::filenames;
     } break;
@@ -213,13 +220,18 @@ void process_data_received(liblec::lecnet::tcp::client& client,
                 switch (reply_data.mode)
                 {
                 case sync_mode::filenames: {
+#if VERBOSE
                     log("Server notifying what files it needs from this client");
+#endif
 
                     // deserialize filename_list
                     std::vector<std::string> filename_list;
                     if (deserialize_filename_list(reply_data.payload, filename_list, error)) {
                         if (filename_list.empty()) {
+#if VERBOSE
                             log("Server has all of this client's files");
+#endif
+
                             break;
                         }
 
@@ -248,11 +260,15 @@ void process_data_received(liblec::lecnet::tcp::client& client,
                                 // send to server
                                 received.clear();
 
+#if VERBOSE
                                 log("Sending files requested by server");
+#endif
 
                                 if (client.send_data(serialized_requested_data, received, 5, nullptr, error)) {
+#if VERBOSE
                                     log("Files sent successfully!");
                                     log("Server reply: " + received);
+#endif
                                 }
                                 else
                                     log(error);
@@ -267,14 +283,16 @@ void process_data_received(liblec::lecnet::tcp::client& client,
 
                 case sync_mode::filelist: {
                     // server has replied with missing files (if any)
+#if VERBOSE
                     log("Server has replied with possible missing files");
+#endif
 
                     sync_data missing_files_data;
                     if (deserialize_sync_data(received, missing_files_data, error)) {
                         if (missing_files_data.mode == sync_mode::filelist) {
                             // deserialize file list
                             std::vector<file> missing_files;
-                            if (deserialize_files(missing_files_data.payload, missing_files, error)) {
+                            if (deserialize_files(missing_files_data.payload, missing_files, error) && !missing_files.empty()) {
                                 log(std::to_string(missing_files.size()) + " files received from server");
 
                                 // to-do: implement saving these files to the sync folder
