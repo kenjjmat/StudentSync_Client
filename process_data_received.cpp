@@ -32,6 +32,7 @@
 #include <boost/archive/text_iarchive.hpp>
 
 #include "read_file.h"
+#include "write_file.h"
 
 #define VERBOSE 0
 
@@ -295,12 +296,13 @@ void process_data_received(liblec::lecnet::tcp::client& client,
                             if (deserialize_files(missing_files_data.payload, missing_files, error) && !missing_files.empty()) {
                                 log(std::to_string(missing_files.size()) + " files received from server");
 
-                                // to-do: implement saving these files to the sync folder
-
-
-
-
-
+                                // write files to sync folder
+                                for (const auto& this_file : missing_files) {
+                                    if (write_file(this_file.filedata, sync_folder + "\\" + this_file.filename, error))
+                                        log(this_file.filename + " saved successfully to sync folder!");
+                                    else
+                                        log(error);
+                                }
                             }
                         }
                     }

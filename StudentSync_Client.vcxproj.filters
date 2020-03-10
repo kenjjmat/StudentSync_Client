@@ -25,6 +25,9 @@
     <Filter Include="Source Files\read_file">
       <UniqueIdentifier>{dd7fe894-5cf8-482d-9357-a96cf979cf2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\write_file">
+      <UniqueIdentifier>{8353d854-561f-43c5-ab33-79480958d26a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StudentSync_Client.cpp">
@@ -42,6 +45,9 @@
     <ClCompile Include="read_file.cpp">
       <Filter>Source Files\read_file</Filter>
     </ClCompile>
+    <ClCompile Include="write_file.cpp">
+      <Filter>Source Files\write_file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="selectIP.h">
@@ -55,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="read_file.h">
       <Filter>Source Files\read_file</Filter>
+    </ClInclude>
+    <ClInclude Include="write_file.h">
+      <Filter>Source Files\write_file</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
