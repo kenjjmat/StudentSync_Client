@@ -1,4 +1,6 @@
 /*
+** StudentSync_Client.cpp
+**
 ** StudentSync LAN Synchronization Tool: Client
 ** Copyright (c) 2020
 ** Alec T. Musasa (alecmus at live dot com),
@@ -7,7 +9,8 @@
 ** Released under the Creative Commons Attribution Non-Commercial
 ** 2.0 Generic license (CC BY-NC 2.0).
 ** 
-** See accompanying file CC-BY-NC-2.0.txt or copy at [here](https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt).
+** See accompanying file CC-BY-NC-2.0.txt or copy at
+** https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt
 **
 *************************************************************************
 ** Project Details:
@@ -31,7 +34,7 @@
 // liblec network library
 #include <liblec/lecnet/udp.h>  // for UDP broadcasting
 #include <liblec/lecnet/tcp.h>
-#include <liblec/lecui.h>
+#include <liblec/cui.h>
 
 // select IP algorithm
 #include "selectIP.h"
@@ -74,7 +77,7 @@ int main() {
 
                 // no longer running ... check if a datagram was received
                 if (receiver.get(ips_serialized, error)) {
-                    std::cout << liblec::lecui::date::time_stamp() + " ";
+                    std::cout << liblec::cui::date_gen::time_stamp() + " ";
                     printf("\x1B[33m%s\033[0m", "Datagram received!\n");
                     break;
                 }
@@ -101,7 +104,7 @@ int main() {
                 break;
         }
 
-        std::string s = liblec::lecui::date::time_stamp() + " Server IP list: ";
+        std::string s = liblec::cui::date_gen::time_stamp() + " Server IP list: ";
         for (auto ip : ips)
             s += (ip + "; ");
         std::cout << s << std::endl;
@@ -110,14 +113,14 @@ int main() {
         std::vector<std::string> ips_client;
         liblec::lecnet::tcp::get_host_ips(ips_client);
 
-        s = liblec::lecui::date::time_stamp() + " Client IP list: ";
+        s = liblec::cui::date_gen::time_stamp() + " Client IP list: ";
         for (auto ip : ips_client)
             s += (ip + "; ");
         std::cout << s << std::endl;
 
         std::string selected_ip = selectIP(ips, ips_client);
 
-        std::cout << liblec::lecui::date::time_stamp();
+        std::cout << liblec::cui::date_gen::time_stamp();
 
         s = " Selected IP: " + selected_ip + "\n";
 
@@ -143,7 +146,7 @@ int main() {
                     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
                 }
 
-                std::cout << liblec::lecui::date::time_stamp() + " ";
+                std::cout << liblec::cui::date_gen::time_stamp() + " ";
                 printf("\x1B[31m%s\033[0m", "Connection lost!\n");
             }
             else

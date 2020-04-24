@@ -1,4 +1,6 @@
 /*
+** process_data_received.h
+**
 ** StudentSync LAN Synchronization Tool: Client
 ** Copyright (c) 2020
 ** Alec T. Musasa (alecmus at live dot com),
@@ -7,7 +9,8 @@
 ** Released under the Creative Commons Attribution Non-Commercial
 ** 2.0 Generic license (CC BY-NC 2.0).
 ** 
-** See accompanying file CC-BY-NC-2.0.txt or copy at [here](https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt).
+** See accompanying file CC-BY-NC-2.0.txt or copy at
+** https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt
 **
 *************************************************************************
 ** Project Details:

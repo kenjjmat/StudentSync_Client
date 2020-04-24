@@ -1,4 +1,6 @@
 /*
+** process_data_received.cpp
+**
 ** StudentSync LAN Synchronization Tool: Client
 ** Copyright (c) 2020
 ** Alec T. Musasa (alecmus at live dot com),
@@ -7,7 +9,8 @@
 ** Released under the Creative Commons Attribution Non-Commercial
 ** 2.0 Generic license (CC BY-NC 2.0).
 ** 
-** See accompanying file CC-BY-NC-2.0.txt or copy at [here](https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt).
+** See accompanying file CC-BY-NC-2.0.txt or copy at
+** https://github.com/alecmus/StudentSync_Server/blob/master/CC-BY-NC-2.0.txt
 **
 *************************************************************************
 ** Project Details:
@@ -21,7 +24,7 @@
 
 #include "process_data_received.h"
 
-#include <liblec/lecui.h>
+#include <liblec/cui.h>
 
 #include <vector>
 #include <filesystem>
@@ -41,7 +44,7 @@
 #define VERBOSE 0
 
 void log(std::string info) {
-    info = liblec::lecui::date::time_stamp() + " " + (info + "\n");
+    info = liblec::cui::date_gen::time_stamp() + " " + (info + "\n");
     std::cout << info;
 }
 
