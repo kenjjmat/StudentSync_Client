@@ -1,16 +1,27 @@
 # StudentSync_Client
 StudentSync LAN Synchronization Tool: Client
 
-<b>StudentSync is a tool for automatically synchronizing Student generated academic material over a LAN.</b>
+<p>
+  <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/kenjjmat/StudentSync_Client">
+</p>
+
+#### Release Info
+<p>
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/kenjjmat/StudentSync_Client">
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/kenjjmat/StudentSync_Client">
+</p>
+
+### About the Project
+This project was done as a group project in partial fulfilment of the requirements for the course SCS2206 at [NUST](https://nust.ac.zw) in the year 2020, Computer Science Department. StudentSync is a tool for automatically synchronizing Student generated academic material over a LAN.
 
 The StudentSync application is made up of two components:
 1. A server application (https://github.com/alecmus/StudentSync_Server)
 2. A client application (https://github.com/kenjjmat/StudentSync_Client)
 
-## DEPENDENCIES
+### Dependencies
 This app was built using the [lecnet network library](https://github.com/alecmus/lecnet), which is part of the [liblec C++ libraries](https://github.com/alecmus/liblec).
 
-## HOW IT WORKS
+### How it Works
 1.  Server sends UDP multicast datagram containing the IP addresses of all its interfaces
 2.  Client listens for datagrams
 3.  Client receives datagram and:
@@ -25,10 +36,10 @@ This app was built using the [lecnet network library](https://github.com/alecmus
 10. Server sends missing files to respective clients, updating missing file table
 11. Client is notified of added files
 
-## PLATFORM
+### Platform
 Microsoft Windows family of operating systems (Win 8, 8.1, 10, or later)
 
-## SYSTEM REQUIREMENTS
+### System Requirements
  * 10MB free disk space minimum
  * 64MB ram minimum
  * Network Card (Ethernet, WiFi etc.)
