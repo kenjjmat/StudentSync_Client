@@ -3,7 +3,7 @@
 **
 ** StudentSync LAN Synchronization Tool: Client
 ** Copyright (c) 2020
-** Alec T. Musasa (alecmus at live dot com),
+** Alec Musasa (alecmus at live dot com),
 ** Kennedy J.J. Maturure (kenjjmat at outlook dot com)
 ** 
 ** Released under the Creative Commons Attribution Non-Commercial
@@ -18,7 +18,7 @@
 ** National University of Science and Technology
 ** SCS2206 Computing in Society Group Project
 **
-** Group members: Alec T. Musasa, Kennedy J.J. Maturure
+** Group members: Alec Musasa, Kennedy J.J. Maturure
 **
 */
 

@@ -1,7 +1,7 @@
 StudentSync
 -----------------------------------------------------------
 Copyright (c) 2020
-Alec T. Musasa (alecmus at live dot com),
+Alec Musasa (alecmus at live dot com),
 Kennedy J.J. Maturure (kenjjmat at outlook dot com)
 
 Released under the Creative Commons Attribution Non-Commercial
