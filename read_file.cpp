@@ -27,14 +27,6 @@
 #include <fstream>
 
 bool read_file(const std::string& filepath, std::string& filedata, std::string& error) {
-	// open the file:
-	std::ifstream file(filepath, std::ios::binary);
-
-	if (!file) {
-		error = "Error reading file";
-		return false;
-	}
-
 	try {
 		// open the file:
 		std::ifstream file(filepath, std::ios::binary);
